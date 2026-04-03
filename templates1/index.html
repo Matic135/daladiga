@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Osebni zapiski</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Dobrodošli, {{ session['user'] }}</h1>
+    <a href="{{ url_for('logout') }}">Logout</a>
+
+    <h2>Dodaj zapisek</h2>
+    <form method="POST" action="{{ url_for('add_note') }}">
+        <input type="text" name="title" placeholder="Naslov" required>
+        <textarea name="content" placeholder="Vsebina" required></textarea>
+        <button type="submit">Dodaj</button>
+    </form>
+
+    <h2>Moji zapiski</h2>
+    <ul>
+        {% for note in notes %}
+        <li id="note-{{ note.doc_id }}">
+            <strong>{{ note.title }}</strong>: {{ note.content }}
+            <button onclick="deleteNote({{ note.doc_id }})">Izbriši</button>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
