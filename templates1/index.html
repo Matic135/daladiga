@@ -1,30 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Osebni zapiski</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>Dobrodošli, {{ session['user'] }}</h1>
-    <a href="{{ url_for('logout') }}">Logout</a>
+<h2>Zapiski</h2>
 
-    <h2>Dodaj zapisek</h2>
-    <form method="POST" action="{{ url_for('add_note') }}">
-        <input type="text" name="title" placeholder="Naslov" required>
-        <textarea name="content" placeholder="Vsebina" required></textarea>
-        <button type="submit">Dodaj</button>
-    </form>
+<a href="/logout">Logout</a>
 
-    <h2>Moji zapiski</h2>
-    <ul>
-        {% for note in notes %}
-        <li id="note-{{ note.doc_id }}">
-            <strong>{{ note.title }}</strong>: {{ note.content }}
-            <button onclick="deleteNote({{ note.doc_id }})">Izbriši</button>
-        </li>
-        {% endfor %}
-    </ul>
+<hr>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-</body>
-</html>
+<h3>Dodaj zapisek</h3>
+
+<form method="POST" action="/add">
+
+    <p>Naslov</p>
+    <input name="title">
+
+    <p>Vsebina</p>
+    <textarea name="content"></textarea>
+
+    <br><br>
+    <button type="submit">Dodaj</button>
+
+</form>
+
+<hr>
+
+<h3>Seznam zapiskov</h3>
+
+{% for note in notes %}
+
+    <h4>{{ note.title }}</h4>
+    <p>{{ note.content }}</p>
+
+    <a href="/delete/{{ note.doc_id }}">Delete</a>
+
+    <hr>
+
+{% endfor %}
