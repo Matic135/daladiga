@@ -1,0 +1,37 @@
+<h2>Social platform</h2>
+
+<a href="/logout">Logout</a>
+
+<hr>
+
+<h3>Nova objava</h3>
+
+<form method="POST" action="/add_post" enctype="multipart/form-data">
+
+Besedilo<br>
+<textarea name="text"></textarea><br><br>
+
+Slika<br>
+<input type="file" name="image"><br><br>
+
+<button type="submit">Objavi</button>
+
+</form>
+
+<hr>
+
+<h3>Objave</h3>
+
+{% for post in posts %}
+
+<p><b>{{post.user}}</b></p>
+
+<p>{{post.text}}</p>
+
+{% if post.image %}
+<img src="/static2/uploads/{{post.image}}" width="200">
+{% endif %}
+
+<hr>
+
+{% endfor %}
