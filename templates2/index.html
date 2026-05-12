@@ -6,13 +6,17 @@
 
 <h3>Nova objava</h3>
 
-<form method="POST" action="/add_post" enctype="multipart/form-data">
+<form id="postForm" enctype="multipart/form-data">
 
 Besedilo<br>
-<textarea name="text"></textarea><br><br>
+<textarea name="text"></textarea>
+
+<br><br>
 
 Slika<br>
-<input type="file" name="image"><br><br>
+<input type="file" name="image">
+
+<br><br>
 
 <button type="submit">Objavi</button>
 
@@ -22,7 +26,11 @@ Slika<br>
 
 <h3>Objave</h3>
 
+<div id="posts">
+
 {% for post in posts %}
+
+<div id="post{{post.doc_id}}">
 
 <p><b>{{post.user}}</b></p>
 
@@ -32,6 +40,95 @@ Slika<br>
 <img src="/static2/uploads/{{post.image}}" width="200">
 {% endif %}
 
+<p>
+Likes:
+<span id="likes{{post.doc_id}}">
+{{post.likes}}
+</span>
+</p>
+
+<button onclick="likePost({{post.doc_id}})">Like</button>
+
+<button onclick="deletePost({{post.doc_id}})">Delete</button>
+
 <hr>
 
+</div>
+
 {% endfor %}
+
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+$("#postForm").submit(function(e){
+
+    e.preventDefault()
+
+    var formData = new FormData(this)
+
+    $.ajax({
+
+        url: "/add_post",
+        method: "POST",
+
+        data: formData,
+
+        processData: false,
+        contentType: false,
+
+        success: function(){
+
+            location.reload()
+
+        }
+
+    })
+
+})
+
+
+function deletePost(id){
+
+    $.ajax({
+
+        url: "/delete_post",
+        method: "POST",
+
+        data:{id:id},
+
+        success:function(){
+
+            $("#post"+id).remove()
+
+        }
+
+    })
+
+}
+
+
+function likePost(id){
+
+    $.ajax({
+
+        url:"/like_post",
+        method:"POST",
+
+        data:{id:id},
+
+        success:function(data){
+
+            $("#likes"+id).text(data.likes)
+
+        }
+
+    })
+
+}
+
+</script>

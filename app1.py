@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, session, jsonify
 from tinydb import TinyDB
 
 app = Flask(__name__, template_folder="templates1")
@@ -10,9 +10,8 @@ users_db = TinyDB("db/users.json")
 
 @app.route("/")
 def index():
-
     if "user" not in session:
-        return redirect("/login")
+        return render_template("login.html")
 
     notes = notes_db.all()
     return render_template("index.html", notes=notes)
@@ -20,66 +19,60 @@ def index():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-
     if request.method == "POST":
 
         username = request.form["username"]
         password = request.form["password"]
 
-        users = users_db.all()
-
-        for user in users:
+        for user in users_db:
             if user["username"] == username and user["password"] == password:
                 session["user"] = username
-                return redirect("/")
+                return jsonify({"status": "ok"})
+
+        return jsonify({"status": "fail"})
 
     return render_template("login.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-
     if request.method == "POST":
 
-        username = request.form["username"]
-        password = request.form["password"]
-
         users_db.insert({
-            "username": username,
-            "password": password
+            "username": request.form["username"],
+            "password": request.form["password"]
         })
 
-        return redirect("/login")
+        return jsonify({"status": "registered"})
 
     return render_template("register.html")
 
 
 @app.route("/logout")
 def logout():
-
-    session.pop("user")
-    return redirect("/login")
+    session.pop("user", None)
+    return jsonify({"status": "logged out"})
 
 
 @app.route("/add", methods=["POST"])
 def add():
 
-    title = request.form["title"]
-    content = request.form["content"]
-
-    notes_db.insert({
-        "title": title,
-        "content": content
+    note = notes_db.insert({
+        "title": request.form["title"],
+        "content": request.form["content"]
     })
 
-    return redirect("/")
+    return jsonify({
+        "id": note,
+        "title": request.form["title"],
+        "content": request.form["content"]
+    })
 
 
 @app.route("/delete/<int:id>")
 def delete(id):
-
     notes_db.remove(doc_ids=[id])
-    return redirect("/")
+    return jsonify({"status": "deleted", "id": id})
 
 
 app.run(debug=True)

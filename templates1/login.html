@@ -1,15 +1,33 @@
 <h2>Login</h2>
 
-<form method="POST">
+<form id="loginForm">
 
-    Username:
-    <input name="username"><br><br>
+<input name="username" placeholder="username"><br><br>
+<input type="password" name="password" placeholder="password"><br><br>
 
-    Password:
-    <input type="password" name="password"><br><br>
-
-    <button type="submit">Login</button>
+<button>Login</button>
 
 </form>
 
 <a href="/register">Register</a>
+
+<script>
+document.getElementById("loginForm").onsubmit = async function(e){
+    e.preventDefault()
+
+    let data = new FormData(this)
+
+    let res = await fetch("/login", {
+        method: "POST",
+        body: data
+    })
+
+    let r = await res.json()
+
+    if(r.status === "ok"){
+        location.href = "/"
+    } else {
+        alert("Wrong login")
+    }
+}
+</script>

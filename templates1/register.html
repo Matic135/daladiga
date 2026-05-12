@@ -1,15 +1,28 @@
 <h2>Register</h2>
 
-<form method="POST">
+<form id="regForm">
 
-    Username:
-    <input name="username"><br><br>
+<input name="username" placeholder="username"><br><br>
+<input type="password" name="password" placeholder="password"><br><br>
 
-    Password:
-    <input type="password" name="password"><br><br>
-
-    <button type="submit">Register</button>
+<button>Register</button>
 
 </form>
 
 <a href="/login">Login</a>
+
+<script>
+document.getElementById("regForm").onsubmit = async function(e){
+    e.preventDefault()
+
+    let data = new FormData(this)
+
+    await fetch("/register", {
+        method: "POST",
+        body: data
+    })
+
+    alert("Registered!")
+    location.href="/login"
+}
+</script>

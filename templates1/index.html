@@ -1,20 +1,16 @@
 <h2>Zapiski</h2>
 
-<a href="/logout">Logout</a>
+<a href="#" onclick="logout()">Logout</a>
 
 <hr>
 
 <h3>Dodaj zapisek</h3>
 
-<form method="POST" action="/add">
+<form id="noteForm">
 
-    <p>Naslov</p>
-    <input name="title">
+    <input name="title" placeholder="Naslov"><br><br>
+    <textarea name="content" placeholder="Vsebina"></textarea><br><br>
 
-    <p>Vsebina</p>
-    <textarea name="content"></textarea>
-
-    <br><br>
     <button type="submit">Dodaj</button>
 
 </form>
@@ -23,13 +19,47 @@
 
 <h3>Seznam zapiskov</h3>
 
+<div id="notes">
 {% for note in notes %}
-
-    <h4>{{ note.title }}</h4>
-    <p>{{ note.content }}</p>
-
-    <a href="/delete/{{ note.doc_id }}">Delete</a>
-
-    <hr>
-
+    <div id="note-{{note.doc_id}}">
+        <h4>{{ note.title }}</h4>
+        <p>{{ note.content }}</p>
+        <button onclick="deleteNote({{note.doc_id}})">Delete</button>
+        <hr>
+    </div>
 {% endfor %}
+</div>
+
+<script>
+document.getElementById("noteForm").onsubmit = async function(e){
+    e.preventDefault()
+
+    let data = new FormData(this)
+
+    let res = await fetch("/add", {
+        method: "POST",
+        body: data
+    })
+
+    let note = await res.json()
+
+    document.getElementById("notes").innerHTML += `
+        <div id="note-${note.id}">
+            <h4>${note.title}</h4>
+            <p>${note.content}</p>
+            <button onclick="deleteNote(${note.id})">Delete</button>
+            <hr>
+        </div>
+    `
+}
+
+async function deleteNote(id){
+    await fetch("/delete/" + id)
+    document.getElementById("note-" + id).remove()
+}
+
+async function logout(){
+    await fetch("/logout")
+    location.reload()
+}
+</script>

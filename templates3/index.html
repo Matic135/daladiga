@@ -1,0 +1,119 @@
+<h2>Shopping List</h2>
+
+<a href="/logout">Logout</a>
+
+<hr>
+
+<h3>Dodaj izdelek</h3>
+
+<input id="itemInput" placeholder="npr. mleko">
+<button onclick="addItem()">Dodaj</button>
+
+<hr>
+
+<h3>Seznam</h3>
+
+<div id="items">
+
+{% for i in items %}
+
+<div id="item{{i.doc_id}}">
+
+<p>{{i.name}}</p>
+
+<p>
+Status: <span id="status{{i.doc_id}}">
+{% if i.done %} KUPOVLJENO {% else %} NI KUPLJENO {% endif %}
+</span>
+</p>
+
+<button onclick="doneItem({{i.doc_id}})">Done</button>
+<button onclick="deleteItem({{i.doc_id}})">Delete</button>
+
+<hr>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+function addItem(){
+
+    $.ajax({
+
+        url:"/add_item",
+        method:"POST",
+        data:{
+            name: $("#itemInput").val()
+        },
+
+        success:function(res){
+
+            $("#items").append(`
+                <div id="item${res.id}">
+                    <p>${res.name}</p>
+
+                    <p>
+                    Status: <span id="status${res.id}">NI KUPLJENO</span>
+                    </p>
+
+                    <button onclick="doneItem(${res.id})">Done</button>
+                    <button onclick="deleteItem(${res.id})">Delete</button>
+
+                    <hr>
+                </div>
+            `)
+
+            $("#itemInput").val("")
+        }
+
+    })
+
+}
+
+
+function doneItem(id){
+
+    $.ajax({
+
+        url:"/done_item",
+        method:"POST",
+        data:{id:id},
+
+        success:function(){
+
+            $("#status"+id).text("KUPLJENO")
+            $("#item"+id).css("opacity","0.5")
+
+        }
+
+    })
+
+}
+
+
+function deleteItem(id){
+
+    $.ajax({
+
+        url:"/delete_item",
+        method:"POST",
+        data:{id:id},
+
+        success:function(){
+
+            $("#item"+id).remove()
+
+        }
+
+    })
+
+}
+
+</script>

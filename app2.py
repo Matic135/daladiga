@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, jsonify
 from tinydb import TinyDB
 import os
 
@@ -18,6 +18,7 @@ def index():
         return redirect("/login")
 
     posts = posts_db.all()
+
     return render_template("index.html", posts=posts)
 
 
@@ -44,12 +45,9 @@ def register():
 
     if request.method == "POST":
 
-        username = request.form["username"]
-        password = request.form["password"]
-
         users_db.insert({
-            "username": username,
-            "password": password
+            "username": request.form["username"],
+            "password": request.form["password"]
         })
 
         return redirect("/login")
@@ -64,6 +62,7 @@ def logout():
     return redirect("/login")
 
 
+
 @app.route("/add_post", methods=["POST"])
 def add_post():
 
@@ -72,17 +71,44 @@ def add_post():
 
     filename = ""
 
-    if image:
+    if image and image.filename != "":
         filename = image.filename
         image.save(os.path.join(UPLOAD_FOLDER, filename))
 
     posts_db.insert({
         "user": session["user"],
         "text": text,
-        "image": filename
+        "image": filename,
+        "likes": 0
     })
 
-    return redirect("/")
+    return jsonify({"status":"ok"})
+
+
+
+@app.route("/delete_post", methods=["POST"])
+def delete_post():
+
+    post_id = int(request.form["id"])
+
+    posts_db.remove(doc_ids=[post_id])
+
+    return jsonify({"status":"ok"})
+
+
+
+@app.route("/like_post", methods=["POST"])
+def like_post():
+
+    post_id = int(request.form["id"])
+
+    post = posts_db.get(doc_id=post_id)
+
+    new_likes = post.get("likes",0) + 1
+
+    posts_db.update({"likes": new_likes}, doc_ids=[post_id])
+
+    return jsonify({"likes": new_likes})
 
 
 app.run(debug=True, port=5001)
