@@ -1,52 +1,30 @@
 <h2>Shopping List</h2>
-
 <a href="/logout">Logout</a>
-
 <hr>
-
 <h3>Dodaj izdelek</h3>
-
 <input id="itemInput" placeholder="npr. mleko">
 <button onclick="addItem()">Dodaj</button>
-
 <hr>
-
 <h3>Seznam</h3>
-
 <div id="items">
-
 {% for i in items %}
-
 <div id="item{{i.doc_id}}">
-
 <p>{{i.name}}</p>
-
 <p>
 Status: <span id="status{{i.doc_id}}">
 {% if i.done %} KUPOVLJENO {% else %} NI KUPLJENO {% endif %}
 </span>
 </p>
-
 <button onclick="doneItem({{i.doc_id}})">Done</button>
 <button onclick="deleteItem({{i.doc_id}})">Delete</button>
-
 <hr>
-
 </div>
-
 {% endfor %}
-
 </div>
-
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
-
 function addItem(){
-
     $.ajax({
-
         url:"/add_item",
         method:"POST",
         data:{
@@ -76,7 +54,6 @@ function addItem(){
     })
 
 }
-
 
 function doneItem(id){
 
