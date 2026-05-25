@@ -1,90 +1,155 @@
+<!-- =========================
+     NASLOV STRANI
+========================= -->
 <h2>Social platform</h2>
 
+
+<!-- Logout -->
 <a href="/logout">Logout</a>
 
 <hr>
 
+
+<!-- =========================
+     NOVA OBJAVA
+========================= -->
 <h3>Nova objava</h3>
 
 <form id="postForm" enctype="multipart/form-data">
 
-Besedilo<br>
-<textarea name="text"></textarea>
+    <!-- Besedilo objave -->
+    Besedilo
+    <br>
 
-<br><br>
+    <textarea name="text"></textarea>
 
-Slika<br>
-<input type="file" name="image">
+    <br><br>
 
-<br><br>
+    <!-- Slika -->
+    Slika
+    <br>
 
-<button type="submit">Objavi</button>
+    <input type="file" name="image">
+
+    <br><br>
+
+    <!-- Gumb -->
+    <button type="submit">
+        Objavi
+    </button>
 
 </form>
 
 <hr>
 
+
+<!-- =========================
+     OBJAVE
+========================= -->
 <h3>Objave</h3>
 
 <div id="posts">
 
-{% for post in posts %}
+    <!-- Flask loop -->
+    {% for post in posts %}
 
-<div id="post{{post.doc_id}}">
+    <div id="post{{post.doc_id}}">
 
-<p><b>{{post.user}}</b></p>
+        <!-- Username -->
+        <p>
+            <b>{{post.user}}</b>
+        </p>
 
-<p>{{post.text}}</p>
+        <!-- Text -->
+        <p>{{post.text}}</p>
 
-{% if post.image %}
-<img src="/static2/uploads/{{post.image}}" width="200">
-{% endif %}
 
-<p>
-Likes:
-<span id="likes{{post.doc_id}}">
-{{post.likes}}
-</span>
-</p>
+        <!-- Če obstaja slika -->
+        {% if post.image %}
 
-<button onclick="likePost({{post.doc_id}})">Like</button>
+        <img
+            src="/static2/uploads/{{post.image}}"
+            width="200"
+        >
 
-<button onclick="deletePost({{post.doc_id}})">Delete</button>
+        {% endif %}
 
-<hr>
+
+        <!-- Likes -->
+        <p>
+
+            Likes:
+
+            <span id="likes{{post.doc_id}}">
+                {{post.likes}}
+            </span>
+
+        </p>
+
+
+        <!-- Like button -->
+        <button onclick="likePost({{post.doc_id}})">
+            Like
+        </button>
+
+
+        <!-- Delete button -->
+        <button onclick="deletePost({{post.doc_id}})">
+            Delete
+        </button>
+
+        <hr>
+
+    </div>
+
+    {% endfor %}
 
 </div>
 
-{% endfor %}
-
-</div>
 
 
-
+<!-- =========================
+     JQUERY
+========================= -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
 <script>
 
+
+// =========================
+// DODAJANJE OBJAVE
+// =========================
 $("#postForm").submit(function(e){
 
+    // Prepreči reload strani
     e.preventDefault()
 
+    // Dobimo podatke iz forme
     var formData = new FormData(this)
 
+    // AJAX request
     $.ajax({
 
         url: "/add_post",
+
         method: "POST",
 
         data: formData,
 
+        // Potrebno za file upload
         processData: false,
         contentType: false,
 
+        // Če uspe
         success: function(){
 
+            // Reload strani
             location.reload()
-
         }
 
     })
@@ -92,19 +157,28 @@ $("#postForm").submit(function(e){
 })
 
 
+
+// =========================
+// BRISANJE OBJAVE
+// =========================
 function deletePost(id){
 
     $.ajax({
 
         url: "/delete_post",
+
         method: "POST",
 
-        data:{id:id},
+        // Pošljemo ID
+        data: {
+            id: id
+        },
 
-        success:function(){
+        // Če uspe
+        success: function(){
 
-            $("#post"+id).remove()
-
+            // Izbrišemo HTML element
+            $("#post" + id).remove()
         }
 
     })
@@ -112,19 +186,28 @@ function deletePost(id){
 }
 
 
+
+// =========================
+// LIKE OBJAVE
+// =========================
 function likePost(id){
 
     $.ajax({
 
-        url:"/like_post",
-        method:"POST",
+        url: "/like_post",
 
-        data:{id:id},
+        method: "POST",
 
-        success:function(data){
+        // Pošljemo ID
+        data: {
+            id: id
+        },
 
-            $("#likes"+id).text(data.likes)
+        // Če uspe
+        success: function(data){
 
+            // Update likes
+            $("#likes" + id).text(data.likes)
         }
 
     })

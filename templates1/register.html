@@ -1,28 +1,60 @@
+<!-- =========================
+     NASLOV STRANI
+========================= -->
 <h2>Register</h2>
 
+
+<!-- =========================
+     REGISTER FORMA
+========================= -->
 <form id="regForm">
 
-<input name="username" placeholder="username"><br><br>
-<input type="password" name="password" placeholder="password"><br><br>
+    <!-- Username -->
+    <input name="username" placeholder="username">
+    <br><br>
 
-<button>Register</button>
+    <!-- Password -->
+    <input type="password" name="password" placeholder="password">
+    <br><br>
+
+    <!-- Gumb za register -->
+    <button>Register</button>
 
 </form>
 
+
+<!-- Link za login -->
 <a href="/login">Login</a>
 
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
 <script>
+
+
+// =========================
+// REGISTER
+// =========================
 document.getElementById("regForm").onsubmit = async function(e){
+
+    // Prepreči reload strani
     e.preventDefault()
 
+    // Dobimo podatke iz forme
     let data = new FormData(this)
 
+    // Pošljemo POST request
     await fetch("/register", {
         method: "POST",
         body: data
     })
 
+    // Obvestilo uporabniku
     alert("Registered!")
-    location.href="/login"
+
+    // Redirect na login stran
+    location.href = "/login"
 }
+
 </script>

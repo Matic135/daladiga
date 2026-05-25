@@ -1,33 +1,69 @@
+<!-- =========================
+     NASLOV STRANI
+========================= -->
 <h2>Login</h2>
 
+
+<!-- =========================
+     LOGIN FORMA
+========================= -->
 <form id="loginForm">
 
-<input name="username" placeholder="username"><br><br>
-<input type="password" name="password" placeholder="password"><br><br>
+    <!-- Username -->
+    <input name="username" placeholder="username">
+    <br><br>
 
-<button>Login</button>
+    <!-- Password -->
+    <input type="password" name="password" placeholder="password">
+    <br><br>
+
+    <!-- Gumb za login -->
+    <button>Login</button>
 
 </form>
 
+
+<!-- Link za register -->
 <a href="/register">Register</a>
 
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
 <script>
+
+
+// =========================
+// LOGIN
+// =========================
 document.getElementById("loginForm").onsubmit = async function(e){
+
+    // Prepreči reload strani
     e.preventDefault()
 
+    // Dobimo podatke iz forme
     let data = new FormData(this)
 
-    let res = await fetch("/login", {
+    // Pošljemo POST request
+    let response = await fetch("/login", {
         method: "POST",
         body: data
     })
 
-    let r = await res.json()
+    // Pretvorimo odgovor v JSON
+    let result = await response.json()
 
-    if(r.status === "ok"){
+    // Če je login uspešen
+    if(result.status === "ok"){
+
+        // Redirect na glavno stran
         location.href = "/"
+
     } else {
+
+        // Napačen login
         alert("Wrong login")
     }
 }
+
 </script>

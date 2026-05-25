@@ -1,59 +1,139 @@
+<!-- =========================
+     NASLOV STRANI
+========================= -->
 <h2>Zapiski</h2>
+
+<!-- Logout gumb -->
 <a href="#" onclick="logout()">Logout</a>
+
 <hr>
+
+
+<!-- =========================
+     DODAJANJE ZAPISKA
+========================= -->
 <h3>Dodaj zapisek</h3>
+
 <form id="noteForm">
 
-    <input name="title" placeholder="Naslov"><br><br>
-    <textarea name="content" placeholder="Vsebina"></textarea><br><br>
+    <!-- Naslov -->
+    <input name="title" placeholder="Naslov">
+    <br><br>
 
+    <!-- Vsebina -->
+    <textarea name="content" placeholder="Vsebina"></textarea>
+    <br><br>
+
+    <!-- Gumb -->
     <button type="submit">Dodaj</button>
 
 </form>
+
 <hr>
+
+
+<!-- =========================
+     SEZNAM ZAPISKOV
+========================= -->
 <h3>Seznam zapiskov</h3>
 
 <div id="notes">
-{% for note in notes %}
-    <div id="note-{{note.doc_id}}">
-        <h4>{{ note.title }}</h4>
-        <p>{{ note.content }}</p>
-        <button onclick="deleteNote({{note.doc_id}})">Delete</button>
-        <hr>
-    </div>
-{% endfor %}
+
+    <!-- Flask for loop -->
+    {% for note in notes %}
+
+        <div id="note-{{note.doc_id}}">
+
+            <h4>{{ note.title }}</h4>
+
+            <p>{{ note.content }}</p>
+
+            <!-- Brisanje zapiska -->
+            <button onclick="deleteNote({{note.doc_id}})">
+                Delete
+            </button>
+
+            <hr>
+
+        </div>
+
+    {% endfor %}
+
 </div>
 
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
 <script>
+
+
+// =========================
+// DODAJANJE ZAPISKA
+// =========================
 document.getElementById("noteForm").onsubmit = async function(e){
+
+    // Prepreči reload strani
     e.preventDefault()
 
+    // Dobimo podatke iz forme
     let data = new FormData(this)
 
-    let res = await fetch("/add", {
+    // Pošljemo POST request
+    let response = await fetch("/add", {
         method: "POST",
         body: data
     })
 
-    let note = await res.json()
+    // Pretvorimo odgovor v JSON
+    let note = await response.json()
 
+    // Dodamo nov zapisek na stran
     document.getElementById("notes").innerHTML += `
+
         <div id="note-${note.id}">
+
             <h4>${note.title}</h4>
+
             <p>${note.content}</p>
-            <button onclick="deleteNote(${note.id})">Delete</button>
+
+            <button onclick="deleteNote(${note.id})">
+                Delete
+            </button>
+
             <hr>
+
         </div>
+
     `
 }
 
+
+
+// =========================
+// BRISANJE ZAPISKA
+// =========================
 async function deleteNote(id){
+
+    // Pošljemo request za delete
     await fetch("/delete/" + id)
+
+    // Izbrišemo element iz HTML
     document.getElementById("note-" + id).remove()
 }
 
+
+
+// =========================
+// LOGOUT
+// =========================
 async function logout(){
+
+    // Logout request
     await fetch("/logout")
+
+    // Reload strani
     location.reload()
 }
+
 </script>
