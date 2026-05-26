@@ -12,9 +12,9 @@ notes_db = TinyDB("db/notes.json")
 users_db = TinyDB("db/users.json")
 
 
-# =========================
+
 # GLAVNA STRAN
-# =========================
+
 @app.route("/")
 def index():
 
@@ -29,9 +29,9 @@ def index():
     return render_template("index.html", notes=notes)
 
 
-# =========================
+
 # LOGIN
-# =========================
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
@@ -59,9 +59,9 @@ def login():
     return render_template("login.html")
 
 
-# =========================
+
 # REGISTER
-# =========================
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
@@ -80,9 +80,9 @@ def register():
     return render_template("register.html")
 
 
-# =========================
+
 # LOGOUT
-# =========================
+
 @app.route("/logout")
 def logout():
 
@@ -92,9 +92,9 @@ def logout():
     return jsonify({"status": "logged out"})
 
 
-# =========================
+
 # DODAJANJE ZAPISKA
-# =========================
+
 @app.route("/add", methods=["POST"])
 def add():
 
@@ -112,9 +112,9 @@ def add():
     })
 
 
-# =========================
+
 # BRISANJE ZAPISKA
-# =========================
+
 @app.route("/delete/<int:id>")
 def delete(id):
 
@@ -127,7 +127,7 @@ def delete(id):
     })
 
 
-# =========================
+
 # ZAGON APLIKACIJE
-# =========================
+
 app.run(debug=True)

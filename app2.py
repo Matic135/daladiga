@@ -3,9 +3,9 @@ from tinydb import TinyDB
 import os
 
 
-# =========================
+
 # FLASK APP
-# =========================
+
 app = Flask(
     __name__,
     template_folder="templates2",
@@ -16,22 +16,22 @@ app = Flask(
 app.secret_key = "123"
 
 
-# =========================
+
 # BAZE
-# =========================
+
 posts_db = TinyDB("db/posts.json")
 users_db = TinyDB("db/users2.json")
 
 
-# =========================
+
 # FOLDER ZA SLIKE
-# =========================
+
 UPLOAD_FOLDER = "static2/uploads"
 
 
-# =========================
+
 # GLAVNA STRAN
-# =========================
+
 @app.route("/")
 def index():
 
@@ -46,9 +46,9 @@ def index():
     return render_template("index.html", posts=posts)
 
 
-# =========================
+
 # LOGIN
-# =========================
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
@@ -76,9 +76,9 @@ def login():
     return render_template("login.html")
 
 
-# =========================
+
 # REGISTER
-# =========================
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
@@ -97,9 +97,9 @@ def register():
     return render_template("register.html")
 
 
-# =========================
+
 # LOGOUT
-# =========================
+
 @app.route("/logout")
 def logout():
 
@@ -109,9 +109,9 @@ def logout():
     return redirect("/login")
 
 
-# =========================
+
 # DODAJANJE POSTA
-# =========================
+
 @app.route("/add_post", methods=["POST"])
 def add_post():
 
@@ -147,9 +147,8 @@ def add_post():
     })
 
 
-# =========================
 # BRISANJE POSTA
-# =========================
+
 @app.route("/delete_post", methods=["POST"])
 def delete_post():
 
@@ -164,9 +163,8 @@ def delete_post():
     })
 
 
-# =========================
 # LIKE POSTA
-# =========================
+
 @app.route("/like_post", methods=["POST"])
 def like_post():
 
@@ -190,7 +188,7 @@ def like_post():
     })
 
 
-# =========================
+
 # ZAGON APLIKACIJE
-# =========================
+
 app.run(debug=True, port=5001)

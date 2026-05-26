@@ -2,9 +2,9 @@ from flask import Flask, render_template, request, redirect, session, jsonify
 from tinydb import TinyDB
 
 
-# =========================
+
 # FLASK APP
-# =========================
+
 app = Flask(
     __name__,
     template_folder="templates3",
@@ -15,16 +15,16 @@ app = Flask(
 app.secret_key = "123"
 
 
-# =========================
+
 # BAZE
-# =========================
+
 users_db = TinyDB("db2/users.json")
 items_db = TinyDB("db2/items.json")
 
 
-# =========================
+
 # LOGIN
-# =========================
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
@@ -49,9 +49,9 @@ def login():
     return render_template("login.html")
 
 
-# =========================
+
 # REGISTER
-# =========================
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
@@ -70,9 +70,9 @@ def register():
     return render_template("register.html")
 
 
-# =========================
+
 # LOGOUT
-# =========================
+
 @app.route("/logout")
 def logout():
 
@@ -82,9 +82,9 @@ def logout():
     return redirect("/login")
 
 
-# =========================
+
 # GLAVNA STRAN
-# =========================
+
 @app.route("/")
 def index():
 
@@ -99,9 +99,9 @@ def index():
     return render_template("index.html", items=items)
 
 
-# =========================
+
 # DODAJ ITEM
-# =========================
+
 @app.route("/add_item", methods=["POST"])
 def add_item():
 
@@ -122,9 +122,9 @@ def add_item():
     })
 
 
-# =========================
+
 # OZNAČI ITEM KOT DONE
-# =========================
+
 @app.route("/done_item", methods=["POST"])
 def done_item():
 
@@ -141,9 +141,9 @@ def done_item():
     })
 
 
-# =========================
+
 # DELETE ITEM
-# =========================
+
 @app.route("/delete_item", methods=["POST"])
 def delete_item():
 
@@ -158,7 +158,7 @@ def delete_item():
     })
 
 
-# =========================
+
 # ZAGON APLIKACIJE
-# =========================
+
 app.run(debug=True, port=5003)
