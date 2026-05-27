@@ -1,6 +1,4 @@
-<!-- =========================
-     NASLOV STRANI
-========================= -->
+<!-- NASLOV STRANI-->
 <h2>Social platform</h2>
 
 
@@ -10,9 +8,7 @@
 <hr>
 
 
-<!-- =========================
-     NOVA OBJAVA
-========================= -->
+<!--  NOVA OBJAVA-->
 <h3>Nova objava</h3>
 
 <form id="postForm" enctype="multipart/form-data">
@@ -43,9 +39,7 @@
 <hr>
 
 
-<!-- =========================
-     OBJAVE
-========================= -->
+<!-- OBJAVE-->
 <h3>Objave</h3>
 
 <div id="posts">
@@ -108,22 +102,18 @@
 
 
 
-<!-- =========================
-     JQUERY
-========================= -->
+<!-- JQUERY -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
 
-<!-- =========================
-     JAVASCRIPT
-========================= -->
+<!--  JAVASCRIPT-->
 <script>
 
 
-// =========================
+
 // DODAJANJE OBJAVE
-// =========================
+
 $("#postForm").submit(function(e){
 
     // Prepreči reload strani
@@ -158,9 +148,9 @@ $("#postForm").submit(function(e){
 
 
 
-// =========================
+
 // BRISANJE OBJAVE
-// =========================
+
 function deletePost(id){
 
     $.ajax({
@@ -187,9 +177,9 @@ function deletePost(id){
 
 
 
-// =========================
+
 // LIKE OBJAVE
-// =========================
+
 function likePost(id){
 
     $.ajax({

@@ -1,6 +1,4 @@
-<!-- =========================
-     NASLOV STRANI
-========================= -->
+<!--  NASLOV STRANI -->
 <h2>Zapiski</h2>
 
 <!-- Logout gumb -->
@@ -9,9 +7,7 @@
 <hr>
 
 
-<!-- =========================
-     DODAJANJE ZAPISKA
-========================= -->
+<!--  DODAJANJE ZAPISKA-->
 <h3>Dodaj zapisek</h3>
 
 <form id="noteForm">
@@ -32,9 +28,7 @@
 <hr>
 
 
-<!-- =========================
-     SEZNAM ZAPISKOV
-========================= -->
+<!--  SEZNAM ZAPISKOV-->
 <h3>Seznam zapiskov</h3>
 
 <div id="notes">
@@ -62,15 +56,13 @@
 </div>
 
 
-<!-- =========================
-     JAVASCRIPT
-========================= -->
+<!-- JAVASCRIPT-->
 <script>
 
 
-// =========================
+
 // DODAJANJE ZAPISKA
-// =========================
+
 document.getElementById("noteForm").onsubmit = async function(e){
 
     // Prepreči reload strani
@@ -110,9 +102,9 @@ document.getElementById("noteForm").onsubmit = async function(e){
 
 
 
-// =========================
+
 // BRISANJE ZAPISKA
-// =========================
+
 async function deleteNote(id){
 
     // Pošljemo request za delete
@@ -124,9 +116,9 @@ async function deleteNote(id){
 
 
 
-// =========================
+
 // LOGOUT
-// =========================
+
 async function logout(){
 
     // Logout request
