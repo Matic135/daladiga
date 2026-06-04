@@ -1,35 +1,132 @@
-<h2>Zapiski</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zapiski</title>
+</head>
+<body>
+
+<h1>Pozdravljen {{ username }}</h1>
 
 <a href="/logout">Logout</a>
 
 <hr>
 
-<h3>Dodaj zapisek</h3>
+<h2>Dodaj zapisek</h2>
 
-<form method="POST" action="/add">
+<input
+    type="text"
+    id="title"
+    placeholder="Naslov"
+>
 
-<input name="title"><br><br>
-<textarea name="content"></textarea><br><br>
+<br><br>
 
-<button>Dodaj</button>
+<textarea
+    id="content"
+    placeholder="Vsebina"
+></textarea>
 
-</form>
+<br><br>
+
+<button onclick="addNote()">
+    Dodaj
+</button>
 
 <hr>
 
-<h3>Seznam</h3>
+<h2>Moji zapiski</h2>
 
 {% for note in notes %}
 
-<div>
+<div style="border:1px solid black; padding:10px; margin:10px;">
 
-<h4>{{note.title}}</h4>
-<p>{{note.content}}</p>
+    <h3>{{ note.title }}</h3>
 
-<a href="/delete/{{note.doc_id}}">Delete</a>
+    <p>{{ note.content }}</p>
 
-<hr>
+    <button onclick="editNote('{{ note.doc_id }}')">
+        Uredi
+    </button>
+
+    <button onclick="deleteNote('{{ note.doc_id }}')">
+        Izbriši
+    </button>
 
 </div>
 
 {% endfor %}
+
+
+<script>
+
+async function addNote() {
+
+    let title =
+        document.getElementById("title").value;
+
+    let content =
+        document.getElementById("content").value;
+
+    await fetch("/add_note", {
+        method: "POST",
+        headers: {
+            "Content-Type":
+            "application/json"
+        },
+        body: JSON.stringify({
+            title: title,
+            content: content
+        })
+    });
+
+    location.reload();
+}
+
+
+async function deleteNote(id) {
+
+    await fetch(
+        "/delete_note/" + id,
+        {
+            method: "POST"
+        }
+    );
+
+    location.reload();
+}
+
+
+async function editNote(id) {
+
+    let title =
+        prompt("Nov naslov:");
+
+    let content =
+        prompt("Nova vsebina:");
+
+    if (title == null || content == null) {
+        return;
+    }
+
+    await fetch(
+        "/edit_note/" + id,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type":
+                "application/json"
+            },
+            body: JSON.stringify({
+                title: title,
+                content: content
+            })
+        }
+    );
+
+    location.reload();
+}
+
+</script>
+
+</body>
+</html>
