@@ -5,14 +5,17 @@
 </head>
 <body>
 
+<!-- Izpišemo prijavljenega uporabnika -->
 <h1>Pozdravljen {{ username }}</h1>
 
+<!-- Odjava -->
 <a href="/logout">Logout</a>
 
 <hr>
 
 <h2>Dodaj zapisek</h2>
 
+<!-- Polje za naslov -->
 <input
     type="text"
     id="title"
@@ -21,6 +24,7 @@
 
 <br><br>
 
+<!-- Polje za vsebino -->
 <textarea
     id="content"
     placeholder="Vsebina"
@@ -28,6 +32,7 @@
 
 <br><br>
 
+<!-- Gumb za dodajanje -->
 <button onclick="addNote()">
     Dodaj
 </button>
@@ -36,18 +41,23 @@
 
 <h2>Moji zapiski</h2>
 
+<!-- Jinja loop za prikaz vseh zapiskov -->
 {% for note in notes %}
 
 <div style="border:1px solid black; padding:10px; margin:10px;">
 
+    <!-- Naslov zapiska -->
     <h3>{{ note.title }}</h3>
 
+    <!-- Vsebina zapiska -->
     <p>{{ note.content }}</p>
 
+    <!-- Gumb za urejanje -->
     <button onclick="editNote('{{ note.doc_id }}')">
         Uredi
     </button>
 
+    <!-- Gumb za brisanje -->
     <button onclick="deleteNote('{{ note.doc_id }}')">
         Izbriši
     </button>
@@ -59,14 +69,19 @@
 
 <script>
 
+// DODAJANJE ZAPISKA
+
 async function addNote() {
 
+    // Preberemo naslov
     let title =
         document.getElementById("title").value;
 
+    // Preberemo vsebino
     let content =
         document.getElementById("content").value;
 
+    // Pošljemo podatke Flasku kot JSON
     await fetch("/add_note", {
         method: "POST",
         headers: {
@@ -79,12 +94,16 @@ async function addNote() {
         })
     });
 
+    // Osvežimo stran
     location.reload();
 }
 
 
+// BRISANJE ZAPISKA
+
 async function deleteNote(id) {
 
+    // Pošljemo POST zahtevo na delete route
     await fetch(
         "/delete_note/" + id,
         {
@@ -92,22 +111,29 @@ async function deleteNote(id) {
         }
     );
 
+    // Osvežimo stran
     location.reload();
 }
 
 
+// UREJANJE ZAPISKA
+
 async function editNote(id) {
 
+    // Uporabnik vnese nov naslov
     let title =
         prompt("Nov naslov:");
 
+    // Uporabnik vnese novo vsebino
     let content =
         prompt("Nova vsebina:");
 
+    // Če prekliče prompt
     if (title == null || content == null) {
         return;
     }
 
+    // Pošljemo nove podatke Flasku
     await fetch(
         "/edit_note/" + id,
         {
@@ -123,6 +149,7 @@ async function editNote(id) {
         }
     );
 
+    // Osvežimo stran
     location.reload();
 }
 
